@@ -7,6 +7,8 @@ import Balance from './components/Balance/index.jsx'
 import TransactionCard, { Cards } from './components/TransactionCard'
 import AddTransaction from './components/AddTransaction/index.jsx'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import TransactionInfo from './Pages/TransactionInfo/index.jsx'
+import AddTransactionPage from './Pages/AddTransactionPage'
 
 export default function App() {
   const [theme, setTheme] = useState({
@@ -18,9 +20,9 @@ export default function App() {
     <ThemeProvider theme={returnTheme(theme.mode, theme.color)}>
       <GlobalStyle />
       <Router>
-        <Route exact path='/add'>
-          Hello
-        </Route>
+        <Route exact path='/transaction/:_id' component={TransactionInfo} />
+
+        <Route exact path='/add' component={AddTransactionPage}></Route>
         <Route exact path='/'>
           <Balance spent={`R$${2000.0}`} theme={theme} setTheme={setTheme} />
           <Cards>

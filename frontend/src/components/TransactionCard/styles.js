@@ -1,6 +1,7 @@
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
-export const Container = styled.div`
+export const Container = styled(Link)`
   border-radius: 0.5em;
   display: flex;
   flex-direction: column;
@@ -12,7 +13,8 @@ export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.bgContrast};
   font-size: 1.6rem;
   font-weight: 450;
-  margin: 10px 0px;
+  margin: 10px 0;
+  cursor: pointer;
   p {
     display: flex;
     justify-content: space-between;
@@ -21,7 +23,7 @@ export const Container = styled.div`
 export const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100vw;
+  width: 100%;
   align-items: center;
   background-color: ${({ theme }) => theme.colors.bg};
   justify-content: space-evenly;

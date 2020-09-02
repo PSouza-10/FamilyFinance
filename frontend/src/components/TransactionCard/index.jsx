@@ -2,9 +2,9 @@ import React from 'react'
 
 import { Container, CardWrapper } from './styles'
 
-function TransactionCard({ type, date, value }) {
+function TransactionCard({ _id, type, date, value }) {
   return (
-    <Container>
+    <Container to={`/transaction/${_id}`}>
       <p>{date}</p>
       <p>
         <span>{type}</span>

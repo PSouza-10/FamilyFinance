@@ -35,11 +35,11 @@ const returnTheme = (darkMode = false, color = 'green') => {
       xl: '1200px'
     },
     font: {
-      xs: '8pt',
-      sm: '12pt',
-      md: '18pt',
-      lg: '24pt',
-      xl: '25pt'
+      xs: '52%',
+      sm: '56%',
+      md: '60%',
+      lg: '70%',
+      xl: '80%'
     }
   }
 }

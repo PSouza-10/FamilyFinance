@@ -22,9 +22,17 @@ export default createGlobalStyle`
        background-color: ${({ theme }) => theme.colors.bg};
        
     }
-    html {
-        font-size: 62%;
-    }
+   
+    ${({ theme }) =>
+      Object.keys(theme.breakpoints).map(
+        breakpoint => `
+            @media(min-width: ${theme.breakpoints[breakpoint]}){
+                html{
+                    font-size: ${theme.font[breakpoint]};
+                }
+            }
+        `
+      )}
 
     a{
         text-decoration: none;
