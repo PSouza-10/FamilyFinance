@@ -1,10 +1,44 @@
-import React from 'react'
-import { getTransaction } from '../../placeholder/transaction'
-import { Link } from 'react-router-dom'
-import { Container, Description, Header, ReturnIcon } from './styles'
+import React, { useContext, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import {
+  Container,
+  Description,
+  Header,
+  ReturnIcon,
+  Title,
+  TransactionImage,
+  Value,
+  DeleteIcon,
+  EditIcon,
+  Error
+} from './styles'
+import { GlobalContext } from '../../Context'
 
 export default function TransactionInfo({ match }) {
-  const transaction = getTransaction(match.params._id)
+  const { returnTransaction, deleteTransaction, err } = useContext(
+    GlobalContext
+  )
+  const history = useHistory()
+  const {
+    _id,
+    value,
+    member,
+    date,
+    type,
+    description,
+    imageSrc
+  } = returnTransaction(match.params._id)
+  const [error, setError] = useState(false)
+  const handleDelete = async _id => {
+    const response = await deleteTransaction(_id)
+
+    if (response !== 'ERROR') {
+      history.push('/')
+    } else {
+      setError(true)
+      setTimeout(() => setError(false), 3000)
+    }
+  }
 
   return (
     <>
@@ -12,19 +46,22 @@ export default function TransactionInfo({ match }) {
         <Link to='/'>
           <ReturnIcon />
         </Link>
-        <p>{transaction.type}</p>
+        <p>{type}</p>
+        <DeleteIcon onClick={() => handleDelete(_id)} />
+        <Link to={`/edit/:${_id}`}>
+          <EditIcon />
+        </Link>
       </Header>
       <Container>
-        <div>
-          <span>Valor:</span>
-          <span>R${transaction.value}</span>
-        </div>
-        <div>
-          <span>Data:</span>
-          <span>{transaction.date}</span>
-        </div>
+        <Error show={error}>{err}</Error>
+        <Title>
+          <span>{member}</span>
+          <span>{date}</span>
+        </Title>
+        <TransactionImage src={imageSrc} alt={type} />
+        <Value>R${value}</Value>
 
-        <Description>{transaction.description}</Description>
+        <Description>{description}</Description>
       </Container>
     </>
   )

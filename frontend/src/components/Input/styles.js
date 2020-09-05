@@ -6,7 +6,8 @@ export const Container = styled.div`
   width: 100%;
   padding: 10px 10px;
   align-items: stretch;
-  height: 100px;
+  height: auto;
+  min-height: 100px;
   justify-content: space-evenly;
 `
 
@@ -18,6 +19,43 @@ export const StyledField = styled.input`
   color: ${({ theme }) => theme.colors.detail};
   border-radius: 0.4em;
   font-size: 2rem;
+  width: 100%;
+  &:focus {
+    border: 2px solid ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.bgContrast};
+    color: ${({ theme }) => theme.colors.fg};
+    outline: none;
+    box-shadow: none;
+  }
+`
+
+export const StyledDropdown = styled.select`
+  padding: 4px 6px;
+  height: 40px;
+  border: 1px solid ${({ theme }) => theme.colors.detail};
+  background-color: ${({ theme }) => theme.colors.bg};
+  color: ${({ theme }) => theme.colors.detail};
+  border-radius: 0.4em;
+  font-size: 2rem;
+  &:focus {
+    border: 2px solid ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.bgContrast};
+    color: ${({ theme }) => theme.colors.fg};
+    outline: none;
+    box-shadow: none;
+  }
+`
+
+export const StyledTextarea = styled.textarea`
+  padding: 8px 6px;
+  height: ${({ height }) => height};
+  min-height: 40px;
+  border: 1px solid ${({ theme }) => theme.colors.detail};
+  background-color: ${({ theme }) => theme.colors.bg};
+  color: ${({ theme }) => theme.colors.detail};
+  border-radius: 0.4em;
+  font-size: 2rem;
+  resize: none;
   &:focus {
     border: 2px solid ${({ theme }) => theme.colors.primary};
     background-color: ${({ theme }) => theme.colors.bgContrast};

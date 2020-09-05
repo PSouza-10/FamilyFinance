@@ -32,7 +32,7 @@ function Balance({ spent, theme, setTheme }) {
         onClick={() =>
           setTheme({
             ...theme,
-            mode: !theme.mode
+            darkMode: !theme.darkMode
           })
         }
       />

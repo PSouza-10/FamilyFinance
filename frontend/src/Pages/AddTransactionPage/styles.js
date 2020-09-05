@@ -8,8 +8,9 @@ export const Container = styled.div`
   align-items: stretch;
   color: ${({ theme }) => theme.colors.fg};
   background-color: ${({ theme }) => theme.colors.bg};
-  padding: 10px 8px;
-  height: calc(100vh - 35px);
+  padding: 60px 8px;
+
+  height: calc(140vh - 50px);
 `
 
 export const Header = styled.div`
@@ -40,28 +41,4 @@ export const ReturnIcon = styled(IoMdArrowRoundBack)`
   position: absolute;
   top: 8px;
   left: 6px;
-`
-
-export const Form = styled.div`
-  margin: 60px 5px 15px 5px;
-`
-
-export const Button = styled.div`
-  display: flex;
-  justify-content: center;
-  color: #fff;
-  background: ${({ theme }) => theme.colors.primary};
-  cursor: pointer;
-  font-size: 2rem;
-  font-weight: bold;
-  align-items: center;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  height: 7vh;
-
-  &:hover {
-    opacity: 0.7;
-  }
 `

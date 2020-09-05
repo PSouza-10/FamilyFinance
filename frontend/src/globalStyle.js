@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 export default createGlobalStyle`
-   @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+  
     *{
         margin: 0;
         padding: 0;
@@ -13,10 +13,11 @@ export default createGlobalStyle`
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        outline: none;
     }
 
-    body:root {
-        height: 100%;
+    body,body:root {
+        height: 100vh;
         max-width: 100%;
        font-size: 2rem;
        background-color: ${({ theme }) => theme.colors.bg};

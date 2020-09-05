@@ -10,7 +10,7 @@ export const presetColors = {
 
 const returnTheme = (darkMode = false, color = 'green') => {
   const lightColors = {
-    bg: '#f3f3f3',
+    bg: '#f9f9f9',
     bgContrast: '#ffffff',
     fg: '#1e1e24',
     detail: '#B0ACAB'
@@ -19,7 +19,7 @@ const returnTheme = (darkMode = false, color = 'green') => {
     bg: '#222222',
     bgContrast: '#333333',
     fg: '#fafafa',
-    detail: '#1e1e24'
+    detail: '#555555'
   }
 
   return {
