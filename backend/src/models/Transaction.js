@@ -27,7 +27,8 @@ const TransactionSchema = new Schema(
     value: {
       type: Number,
       required: true
-    }
+    },
+    public_id: String
   },
   {
     timestamps: true

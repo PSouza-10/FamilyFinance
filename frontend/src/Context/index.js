@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useEffect, useState } from 'react'
 import Reducer, { initialState } from './Reducer'
-import { GET, POST, DELETE, ERR } from './types'
+import { GET, POST, DELETE, ERR, PUT } from './types'
 import axios from 'axios'
 
 export const GlobalContext = createContext(initialState)
@@ -19,7 +19,6 @@ export const GlobalProvider = ({ children }) => {
     getTransactions()
   }, [])
   async function getTransactions() {
-    console.log('function called')
     try {
       const { data } = await axios.get('/')
 
@@ -30,7 +29,9 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       dispatch({
         type: ERR,
-        payload: 'Unable to get transactions from server.'
+        payload: err.response
+          ? err.response.data
+          : 'Falha na conexão com o servidor'
       })
     }
   }
@@ -48,7 +49,7 @@ export const GlobalProvider = ({ children }) => {
     } catch (err) {
       dispatch({
         type: ERR,
-        payload: 'Unable to delete transaction.'
+        payload: err.response.data
       })
       return 'ERROR'
     }
@@ -69,10 +70,41 @@ export const GlobalProvider = ({ children }) => {
 
       return data._id
     } catch (err) {
-      console.log(err)
       dispatch({
         type: ERR,
-        payload: 'Erro de Validação: Preencha os campos necessários'
+        payload: err.response
+          ? err.response.data
+          : 'Falha na conexão com o servidor'
+      })
+
+      return 'ERROR'
+    }
+  }
+
+  async function editTransaction(changes) {
+    try {
+      const { data } = await axios.put(
+        `/${changes._id}`,
+        JSON.stringify(changes),
+        {
+          headers: {
+            'Content-Type': 'Application/json'
+          }
+        }
+      )
+
+      dispatch({
+        type: PUT,
+        payload: data
+      })
+
+      return data._id
+    } catch (err) {
+      dispatch({
+        type: ERR,
+        payload: err.response
+          ? err.response.data
+          : 'Falha na conexão com o servidor'
       })
 
       return 'ERROR'
@@ -83,12 +115,6 @@ export const GlobalProvider = ({ children }) => {
     return state.transactions.find(({ _id }) => _id === requested_id) || {}
   }
 
-  function clearError() {
-    dispatch({
-      type: ERR,
-      payload: ''
-    })
-  }
   return (
     <GlobalContext.Provider
       value={{
@@ -99,7 +125,8 @@ export const GlobalProvider = ({ children }) => {
         getTransactions,
         addTransaction,
         deleteTransaction,
-        clearError,
+        editTransaction,
+
         returnTransaction
       }}>
       {children}

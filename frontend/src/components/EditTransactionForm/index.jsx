@@ -1,41 +1,35 @@
 import React, { useState, useContext } from 'react'
 import { Form, Button, Error } from './styles'
 import Input from '../../components/Input'
-import UploadPhoto from '../UploadImage'
 import { GlobalContext } from '../../Context'
+import UploadPhoto from '../UploadImage'
 
-const initDate = () => {
-  const now = new Date()
+const formatDate = unformatted => {
+  const date = unformatted.substring(0, 10).split('/').reverse().join('-')
+  const time = unformatted.substring(11, 16)
 
-  now.setHours(now.getHours() - 3)
-
-  return now.toISOString().substring(0, 16)
+  return new Date([date, time].join('T')).toISOString().substring(0, 16)
 }
 
-export default function AddTransactionForm({ history }) {
-  const { members, addTransaction, err } = useContext(GlobalContext)
+export default function EditTransactionForm({ history, transaction }) {
+  const { members, editTransaction, err } = useContext(GlobalContext)
   const [transactionInfo, setTransactionInfo] = useState({
-    value: 0,
-    type: '',
-    member: members[0],
-    date: initDate(),
-    description: ''
+    ...transaction,
+    date: formatDate(transaction.date)
   })
-
-  const [file, setFile] = useState('')
   const [error, setError] = useState(false)
+  const [file, setFile] = useState(transaction.imageSrc)
+
   const handleChange = ({ target }) => {
     setTransactionInfo({ ...transactionInfo, [target.name]: target.value })
   }
   const handleSubmit = async e => {
     e.preventDefault()
 
-    const info = {
+    const response = await editTransaction({
       ...transactionInfo,
-      image: file
-    }
-
-    const response = await addTransaction(info)
+      newImage: file
+    })
 
     if (response !== 'ERROR') {
       history.push(`/transaction/${response}`)
@@ -103,7 +97,7 @@ export default function AddTransactionForm({ history }) {
         fieldName='Descrição (Opcional)'
       />
       <UploadPhoto file={file} setFile={setFile} />
-      <Button type='submit'>Adicionar Transação</Button>
+      <Button type='submit'>Editar Transação</Button>
     </Form>
   )
 }

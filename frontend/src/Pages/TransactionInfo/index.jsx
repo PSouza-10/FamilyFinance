@@ -48,7 +48,7 @@ export default function TransactionInfo({ match }) {
         </Link>
         <p>{type}</p>
         <DeleteIcon onClick={() => handleDelete(_id)} />
-        <Link to={`/edit/:${_id}`}>
+        <Link to={`/edit/${_id}`}>
           <EditIcon />
         </Link>
       </Header>

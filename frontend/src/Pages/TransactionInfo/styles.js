@@ -89,7 +89,7 @@ export const TransactionImage = styled.img`
   height: auto;
 `
 export const Error = styled.div`
-  position: absolute;
+  position: fixed;
   top: 60px;
   right: 5vw;
   left: 5vw;
