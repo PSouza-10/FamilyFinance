@@ -11,19 +11,12 @@
       href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
       rel="stylesheet"
     />
+
     <title>FamilyFinance</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker
-            .register('./sw.js')
-            .then(reg => console.log('Registration Successful: ', reg.scope))
-            .catch(err => console.log('Registration Failed: ', err))
-        })
-      }
-    </script>
+    <div id="root">
+      <h1>Você está offline</h1>
+    </div>
   </body>
 </html>
