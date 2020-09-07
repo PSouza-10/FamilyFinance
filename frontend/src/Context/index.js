@@ -20,7 +20,7 @@ export const GlobalProvider = ({ children }) => {
   }, [])
   async function getTransactions() {
     try {
-      const { data } = await axios.get('/')
+      const { data } = await axios.get('/transactions')
 
       dispatch({
         type: GET,
