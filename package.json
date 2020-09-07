@@ -15,7 +15,7 @@
     "dotenv": "^8.2.0"
   },
   "scripts": {
-    "start": "node ./backend/src/server.js",
+    "start": "nodemon server.js",
     "frontend": "npm start --prefix frontend",
     "dev": "concurrently \"yarn frontend\" \"yarn backend\"",
     "backend": "nodemon ./backend/src/server.js ",

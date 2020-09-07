@@ -1,4 +1,4 @@
-const app = require('./app')
+const app = require('./backend/src/app')
 const express = require('express')
 const path = require('path')
 require('dotenv').config()
@@ -12,15 +12,5 @@ cloudinary.config({
   api_key: API_KEY,
   api_secret: API_SECRET
 })
-
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname + '/../../frontend/build')))
-
-  app.get('*', (req, res) => {
-    return res.sendFile(
-      path.resolve(__dirname + '/../../frontend/build/index.html')
-    )
-  })
-}
 
 app.listen(PORT, () => console.log(`Servidor inicializado na Porta ${PORT}`))
