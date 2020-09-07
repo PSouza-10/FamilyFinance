@@ -23,7 +23,7 @@ export const UploadPhotoIcon = styled(MdAddAPhoto)`
   flex: 1 0;
 `
 export const ImagePreview = styled.img`
-  height: auto;
+  height: 50vh;
   width: 80%;
   margin-top: 30px;
   margin-bottom: 70px;

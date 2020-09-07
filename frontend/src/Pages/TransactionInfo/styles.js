@@ -86,7 +86,8 @@ export const Title = styled.p`
 `
 
 export const TransactionImage = styled.img`
-  height: auto;
+  height: 52vh;
+  width: 80%;
 `
 export const Error = styled.div`
   position: fixed;
