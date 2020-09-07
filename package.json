@@ -16,7 +16,7 @@
     "frontend": "npm start --prefix frontend",
     "dev": "concurrently \"yarn frontend\" \"yarn backend\"",
     "backend": "nodemon ./backend/src/server.js ",
-    "heroku-postbuild": "cd .. && cd .. && cd frontend && npm install --only=dev && npm install && npm run build"
+    "heroku-postbuild": "cd frontend && npm install --only=dev && npm install && npm run build"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
