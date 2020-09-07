@@ -4,7 +4,7 @@
   "repository": "https://github.com/PSouza-10/FamilyFinance",
   "author": "Psouza-10 <paulosouza300272@gmail.com>",
   "license": "MIT",
-  "main": "./backend/src/server.js",
+  "main": "server.js",
   "private": false,
   "dependencies": {
     "cloudinary": "^1.23.0",
