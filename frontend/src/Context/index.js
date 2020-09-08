@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useEffect, useState } from 'react'
 import Reducer, { initialState } from './Reducer'
-import { GET, POST, DELETE, ERR, PUT } from './types'
+import { GET, POST, DELETE, ERR, PUT, UPDATE } from './types'
 import axios from 'axios'
 
 export const GlobalContext = createContext(initialState)
@@ -20,7 +20,7 @@ export const GlobalProvider = ({ children }) => {
   }, [])
   async function getTransactions() {
     try {
-      const { data } = await axios.get('/transactions')
+      const { data } = await axios.get('http://localhost:5000/api/transactions')
 
       dispatch({
         type: GET,
@@ -30,15 +30,13 @@ export const GlobalProvider = ({ children }) => {
       dispatch({
         type: ERR,
         payload: err.response
-          ? err.response.data
-          : 'Falha na conexão com o servidor'
       })
     }
   }
 
   async function deleteTransaction(_id) {
     try {
-      const { data } = await axios.delete(`/${_id}`)
+      const { data } = await axios.delete(`/api/${_id}`)
 
       dispatch({
         type: DELETE,
@@ -57,7 +55,7 @@ export const GlobalProvider = ({ children }) => {
 
   async function addTransaction(info) {
     try {
-      const { data } = await axios.post(`/`, JSON.stringify(info), {
+      const { data } = await axios.post(`/api`, JSON.stringify(info), {
         headers: {
           'Content-Type': 'Application/json'
         }
@@ -84,7 +82,7 @@ export const GlobalProvider = ({ children }) => {
   async function editTransaction(changes) {
     try {
       const { data } = await axios.put(
-        `/${changes._id}`,
+        `/api/${changes._id}`,
         JSON.stringify(changes),
         {
           headers: {
@@ -115,6 +113,13 @@ export const GlobalProvider = ({ children }) => {
     return state.transactions.find(({ _id }) => _id === requested_id) || {}
   }
 
+  async function updateTransactions(transactions) {
+    dispatch({
+      type: UPDATE,
+      payload: transactions
+    })
+  }
+
   return (
     <GlobalContext.Provider
       value={{
@@ -126,7 +131,7 @@ export const GlobalProvider = ({ children }) => {
         addTransaction,
         deleteTransaction,
         editTransaction,
-
+        updateTransactions,
         returnTransaction
       }}>
       {children}

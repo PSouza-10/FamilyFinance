@@ -1,4 +1,4 @@
-import { GET, POST, DELETE, ERR, PUT } from './types'
+import { GET, POST, DELETE, ERR, PUT, UPDATE } from './types'
 
 export const initialState = {
   members: [
@@ -13,6 +13,7 @@ export const initialState = {
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case GET:
+    case UPDATE:
       return {
         ...state,
         transactions: payload
@@ -39,6 +40,7 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         err: payload
       }
+
     default:
       return state
   }

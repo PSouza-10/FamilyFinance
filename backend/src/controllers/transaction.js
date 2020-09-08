@@ -8,7 +8,8 @@ module.exports = {
     if (transactions === []) {
       return res.status(404).send('Nenhuma transação encontrada')
     }
-    return res.send(transactions)
+
+    return res.json(transactions)
   },
   async add(req, res) {
     const { type, member, date, description, image, value } = req.body
@@ -19,16 +20,22 @@ module.exports = {
         .send('Erro de Validação: Preencha os campos necessários')
     } else {
       const dateString = await returnReadableDate(date)
-      const { public_id, imageSrc } = await uploadToCloudinary(image)
+      let imageData = {
+        public_id: null,
+        imageSrc: undefined
+      }
+      if (image) {
+        imageData = await uploadToCloudinary(image)
+      }
 
       const response = await Transaction.create({
+        ...imageData,
+
         type,
         member,
         value,
         description,
-        date: dateString,
-        imageSrc,
-        public_id
+        date: dateString
       })
 
       return res.send(response)
@@ -50,13 +57,16 @@ module.exports = {
     if (old.date !== date) {
       date = await returnReadableDate(date)
     }
-
-    if (newImage) {
-      const { new_id, url } = await changeCloudinaryImage(newImage, public_id)
-
-      public_id = new_id
-      imageSrc = url
+    let imageData = {
+      public_id: null,
+      imageSrc: undefined
     }
+    if (newImage) {
+      imageData = await changeCloudinaryImage(newImage, public_id)
+    }
+
+    public_id = imageData.public_id
+    imageSrc = imageData.imageSrc
 
     const newTransaction = await Transaction.findOneAndUpdate(
       { _id: req.params._id },
@@ -99,30 +109,38 @@ const returnReadableDate = async date => {
 }
 
 const uploadToCloudinary = async base64Img => {
-  if (base64Img) {
-    try {
-      const { public_id, url } = await cloudinary.uploader.upload(base64Img, {})
+  try {
+    const { public_id, url } = await cloudinary.uploader.upload(base64Img, {})
 
-      return {
-        public_id,
-        imageSrc: url
-      }
-    } catch (error) {
-      console.log('error on cloudinary upload')
+    return {
+      public_id,
+      imageSrc: url
+    }
+  } catch (error) {
+    console.log('error on cloudinary upload')
+    return {
+      public_id: '',
+      imageSrc: ''
     }
   }
 }
 
-const changeCloudinaryImage = async (base64Img, previousImg_id) => {
+const changeCloudinaryImage = async (base64Img, previousImg_id = null) => {
   try {
-    await cloudinary.uploader.destroy(previousImg_id)
+    if (previousImg_id) {
+      await cloudinary.uploader.destroy(previousImg_id)
+    }
     const { public_id, url } = await cloudinary.uploader.upload(base64Img, {})
 
     return {
-      new_id: public_id,
-      url
+      public_id,
+      imageSrc: url
     }
   } catch (error) {
-    console.log('error on cloudinary change')
+    console.log('error on cloudinary upload')
+    return {
+      public_id: '',
+      imageSrc: ''
+    }
   }
 }

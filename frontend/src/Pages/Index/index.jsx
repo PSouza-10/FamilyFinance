@@ -14,8 +14,15 @@ const Error = styled.h1`
 `
 
 export default function Index({ theme, setTheme }) {
-  const { transactions, spent, err } = useContext(GlobalContext)
-
+  const { transactions, spent, err, updateTransactions } = useContext(
+    GlobalContext
+  )
+  navigator.serviceWorker.onmessage = ({ data }) => {
+    const { type, body } = JSON.parse(data)
+    if (type === 'Update Transactions') {
+      updateTransactions(body)
+    }
+  }
   return (
     <>
       <Balance spent={`R$${spent}`} theme={theme} setTheme={setTheme} />

@@ -86,7 +86,7 @@ export const Title = styled.p`
 `
 
 export const TransactionImage = styled.img`
-  height: 52vh;
+  height: 40vh;
   width: 80%;
   align-self: center;
 `

@@ -30,7 +30,7 @@ class App {
   }
 
   routes() {
-    this.express.use(routes)
+    this.express.use('/api', routes)
     if (process.env.NODE_ENV === 'production') {
       this.express.use(express.static('frontend/build'))
 

@@ -19,7 +19,8 @@ const TransactionSchema = new Schema(
     imageSrc: {
       type: String,
       required: false,
-      default: 'https://icon-icons.com/icons2/403/PNG/512/cash_40532.png'
+      default:
+        'https://res.cloudinary.com/souzacloud/image/upload/v1599507362/256x256_igdsbl.png'
     },
     description: {
       type: String
