@@ -19,7 +19,7 @@
     "frontend": "npm start --prefix frontend",
     "dev": "concurrently \"yarn frontend\" \"yarn backend\"",
     "backend": "nodemon server.js ",
-    "heroku-postbuild": "npm install && npm run build"
+    "heroku-postbuild": "npm install"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
