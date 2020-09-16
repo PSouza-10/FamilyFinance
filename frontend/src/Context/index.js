@@ -1,12 +1,18 @@
 import React, { createContext, useReducer, useEffect, useState } from 'react'
+
 import Reducer, { initialState } from './Reducer'
-import { GET, POST, DELETE, ERR, PUT, UPDATE } from './types'
+import { GET, POST, DELETE, ERR, PUT, UPDATE, SET_THEME } from './types'
 import axios from 'axios'
+import { setItem } from '../utils/localStorage'
 
 export const GlobalContext = createContext(initialState)
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(Reducer, initialState)
+
+  useEffect(() => {
+    actions.getTransactions() // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const [spent, setSpent] = useState(0)
   useEffect(() => {
     let newSpent = 0
@@ -15,111 +21,143 @@ export const GlobalProvider = ({ children }) => {
 
     setSpent(newSpent)
   }, [state.transactions])
-  useEffect(() => {
-    getTransactions()
-  }, [])
-  async function getTransactions() {
-    try {
-      const { data } = await axios.get('http://localhost:5000/api/transactions')
 
-      dispatch({
-        type: GET,
-        payload: data
-      })
-    } catch (err) {
+  function returnTransaction(requested_id) {
+    const returnValue =
+      state.transactions.find(({ _id }) => _id === requested_id) || {}
+
+    return returnValue
+  }
+  function clearErrors() {
+    dispatch({
+      type: ERR,
+      payload: ''
+    })
+  }
+  const actions = {
+    async getTransactions() {
       dispatch({
         type: ERR,
-        payload: err.response
+        payload: 'Carregando...'
       })
-    }
-  }
-
-  async function deleteTransaction(_id) {
-    try {
-      const { data } = await axios.delete(`/api/${_id}`)
-
-      dispatch({
-        type: DELETE,
-        payload: data
-      })
-
-      return 'SUCCESS'
-    } catch (err) {
-      dispatch({
-        type: ERR,
-        payload: err.response.data
-      })
-      return 'ERROR'
-    }
-  }
-
-  async function addTransaction(info) {
-    try {
-      const { data } = await axios.post(`/api`, JSON.stringify(info), {
-        headers: {
-          'Content-Type': 'Application/json'
-        }
-      })
-
-      dispatch({
-        type: POST,
-        payload: data
-      })
-
-      return data._id
-    } catch (err) {
+      try {
+        const { data } = await axios.get(
+          'http://localhost:5000/api/transactions'
+        )
+        clearErrors()
+        dispatch({
+          type: GET,
+          payload: data
+        })
+      } catch (err) {
+        dispatch({
+          type: ERR,
+          payload: err.response
+        })
+      }
+    },
+    async editTransaction(changes) {
       dispatch({
         type: ERR,
-        payload: err.response
-          ? err.response.data
-          : 'Falha na conexão com o servidor'
+        payload: 'Enviando...'
       })
+      try {
+        const { data } = await axios.put(
+          `/api/${changes._id}`,
+          JSON.stringify(changes),
+          {
+            headers: {
+              'Content-Type': 'Application/json'
+            }
+          }
+        )
 
-      return 'ERROR'
-    }
-  }
+        dispatch({
+          type: PUT,
+          payload: data
+        })
+        clearErrors()
+        return data._id
+      } catch (err) {
+        dispatch({
+          type: ERR,
+          payload: err.response
+            ? err.response.data
+            : 'Falha na conexão com o servidor'
+        })
+        await setTimeout(() => clearErrors(), 4000)
+        return 'ERROR'
+      }
+    },
+    async deleteTransaction(_id) {
+      dispatch({
+        type: ERR,
+        payload: 'Apagando...'
+      })
+      try {
+        const { data } = await axios.delete(`/api/${_id}`)
 
-  async function editTransaction(changes) {
-    try {
-      const { data } = await axios.put(
-        `/api/${changes._id}`,
-        JSON.stringify(changes),
-        {
+        dispatch({
+          type: DELETE,
+          payload: data
+        })
+        clearErrors()
+        return 'SUCCESS'
+      } catch (err) {
+        dispatch({
+          type: ERR,
+          payload: err.response.data
+        })
+        await setTimeout(() => clearErrors(), 4000)
+        return 'ERROR'
+      }
+    },
+
+    async addTransaction(info) {
+      dispatch({
+        type: ERR,
+        payload: 'Enviando...'
+      })
+      try {
+        const { data } = await axios.post(`/api`, JSON.stringify(info), {
           headers: {
             'Content-Type': 'Application/json'
           }
-        }
-      )
+        })
 
+        dispatch({
+          type: POST,
+          payload: data
+        })
+        clearErrors()
+        return data._id
+      } catch (err) {
+        dispatch({
+          type: ERR,
+          payload: err.response
+            ? err.response.data
+            : 'Falha na conexão com o servidor'
+        })
+        await setTimeout(() => clearErrors(), 4000)
+        return 'ERROR'
+      }
+    },
+
+    async updateTransactions(transactions) {
       dispatch({
-        type: PUT,
-        payload: data
+        type: UPDATE,
+        payload: transactions
       })
+    },
 
-      return data._id
-    } catch (err) {
+    setTheme(newTheme) {
       dispatch({
-        type: ERR,
-        payload: err.response
-          ? err.response.data
-          : 'Falha na conexão com o servidor'
+        type: SET_THEME,
+        payload: newTheme
       })
-
-      return 'ERROR'
+      setItem('theme', newTheme)
     }
   }
-
-  function returnTransaction(requested_id) {
-    return state.transactions.find(({ _id }) => _id === requested_id) || {}
-  }
-
-  async function updateTransactions(transactions) {
-    dispatch({
-      type: UPDATE,
-      payload: transactions
-    })
-  }
-
   return (
     <GlobalContext.Provider
       value={{
@@ -127,12 +165,10 @@ export const GlobalProvider = ({ children }) => {
         spent: spent,
         members: state.members,
         err: state.err,
-        getTransactions,
-        addTransaction,
-        deleteTransaction,
-        editTransaction,
-        updateTransactions,
-        returnTransaction
+        theme: state.theme,
+        returnTransaction,
+        clearErrors,
+        ...actions
       }}>
       {children}
     </GlobalContext.Provider>

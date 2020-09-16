@@ -11,8 +11,19 @@ const cacheUrls = [
 ]
 const self = this
 
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      console.log('Opened Cache')
+      return cache.addAll(cacheUrls)
+    })
+  )
+})
+
 const update = async request => {
+  console.log('update fired')
   const response = await fetch(request.url)
+
   await caches.open(CACHE_NAME).then(cache => {
     cache.put(request, response.clone())
   })
@@ -35,32 +46,12 @@ const refresh = async response => {
 
   return data
 }
-
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      console.log('Opened Cache')
-      return cache.addAll(cacheUrls)
+self.addEventListener('fetch', async e => {
+  e.respondWith(
+    caches.match(e.request).then(response => {
+      return response || fetch(e.request)
     })
   )
-})
-
-self.addEventListener('fetch', async e => {
-  if (e.request.url.includes('/api')) {
-    if (e.request.method === 'GET') {
-      e.respondWith(
-        caches.match(e.request).then(res => (res ? res : { data: [] }))
-      )
-
-      e.waitUntil(update(e.request).then(refresh))
-    }
-  } else {
-    e.respondWith(
-      caches.match(e.request).then(response => {
-        return response || fetch(e.request)
-      })
-    )
-  }
 })
 
 self.addEventListener('activate', e => {

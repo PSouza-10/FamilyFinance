@@ -1,21 +1,21 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import {
   Container,
   Description,
   Header,
-  ReturnIcon,
   Title,
   TransactionImage,
   Value,
   DeleteIcon,
-  EditIcon,
-  Error
+  EditIcon
 } from './styles'
+import Alert from '../../components/UX/Alert'
 import { GlobalContext } from '../../Context'
+import ReturnButton from '../../components/UX/ReturnIcon'
 
 export default function TransactionInfo({ match }) {
-  const { returnTransaction, deleteTransaction, err } = useContext(
+  const { returnTransaction, deleteTransaction, err, clearErrors } = useContext(
     GlobalContext
   )
   const history = useHistory()
@@ -28,32 +28,30 @@ export default function TransactionInfo({ match }) {
     description,
     imageSrc
   } = returnTransaction(match.params._id)
-  const [error, setError] = useState(false)
-  const handleDelete = async _id => {
-    const response = await deleteTransaction(_id)
 
+  const handleDelete = async delete_id => {
+    const response = await deleteTransaction(delete_id)
     if (response !== 'ERROR') {
       history.push('/')
     } else {
-      setError(true)
-      setTimeout(() => setError(false), 3000)
+      setTimeout(() => clearErrors(), 4000)
     }
   }
 
   return (
     <>
       <Header>
-        <Link to='/'>
-          <ReturnIcon />
-        </Link>
+        <ReturnButton to='/' />
         <p>{type}</p>
-        <DeleteIcon onClick={() => handleDelete(_id)} />
+        <DeleteIcon onClick={() => handleDelete(match.params._id)} />
         <Link to={`/edit/${_id}`}>
           <EditIcon />
         </Link>
       </Header>
       <Container>
-        <Error show={error}>{err}</Error>
+        <Alert show={err} color={err !== 'Apagando...' ? 'red' : 'theme'}>
+          {err}
+        </Alert>
         <Title>
           <span>{member}</span>
           <span>{date}</span>

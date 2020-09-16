@@ -1,7 +1,9 @@
 import React, { useState, useContext } from 'react'
-import { Form, Button, Error } from './styles'
-import Input from '../../components/Input'
-import UploadPhoto from '../UploadImage'
+
+import Alert from '../UX/Alert'
+import Input from '../UX/Input'
+import FormButton from '../UX/FormButton'
+import UploadPhoto from '../UX/UploadImage'
 import { GlobalContext } from '../../Context'
 
 const initDate = () => {
@@ -23,13 +25,11 @@ export default function AddTransactionForm({ history }) {
   })
 
   const [file, setFile] = useState('')
-  const [error, setError] = useState(false)
   const handleChange = ({ target }) => {
     setTransactionInfo({ ...transactionInfo, [target.name]: target.value })
   }
   const handleSubmit = async e => {
     e.preventDefault()
-
     const info = {
       ...transactionInfo,
       image: file
@@ -39,14 +39,13 @@ export default function AddTransactionForm({ history }) {
 
     if (response !== 'ERROR') {
       history.push(`/transaction/${response}`)
-    } else {
-      setError(true)
-      setTimeout(() => setError(false), 3000)
     }
   }
   return (
-    <Form onSubmit={handleSubmit}>
-      <Error show={error}>{err}</Error>
+    <form onSubmit={handleSubmit}>
+      <Alert show={err} color={err !== 'Enviando...' ? 'red' : 'theme'}>
+        {err}
+      </Alert>
       <Input
         inputProps={{
           type: 'number',
@@ -103,7 +102,7 @@ export default function AddTransactionForm({ history }) {
         fieldName='Descrição (Opcional)'
       />
       <UploadPhoto file={file} setFile={setFile} />
-      <Button type='submit'>Adicionar Transação</Button>
-    </Form>
+      <FormButton type='submit'>Adicionar Transação</FormButton>
+    </form>
   )
 }

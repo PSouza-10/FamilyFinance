@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { IoMdArrowRoundBack } from 'react-icons/io'
+
 import { MdDelete, MdEdit } from 'react-icons/md'
 
 export const Container = styled.div`
@@ -44,17 +44,6 @@ export const Header = styled.header`
   }
 `
 
-export const ReturnIcon = styled(IoMdArrowRoundBack)`
-  fill: #fff;
-  height: 36px;
-  width: 36px;
-  cursor: pointer;
-  font-weight: 700;
-  position: absolute;
-  top: 8px;
-  left: 6px;
-`
-
 export const DeleteIcon = styled(MdDelete)`
   fill: #fff;
   height: 28px;
@@ -86,24 +75,9 @@ export const Title = styled.p`
 `
 
 export const TransactionImage = styled.img`
-  height: 40vh;
+  height: auto;
   width: 80%;
+  max-width: ${({ theme }) => theme.breakpoints.sm};
+  max-height: ${({ theme }) => theme.breakpoints.sm};
   align-self: center;
-`
-export const Error = styled.div`
-  position: fixed;
-  top: 60px;
-  right: 5vw;
-  left: 5vw;
-
-  border-radius: 0.5em;
-  background-color: red;
-  color: #fff;
-  font-weight: bold;
-  padding: 10px 6px;
-  font-size: 2.5rem;
-  text-align: center;
-  width: 90vw;
-
-  display: ${({ show }) => (show ? 'block' : 'none')};
 `

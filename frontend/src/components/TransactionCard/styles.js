@@ -7,7 +7,7 @@ export const Container = styled(Link)`
   flex-direction: column;
   justify-content: space-between;
   padding: 10px;
-  height: 10vh;
+  height: auto;
   width: 90vw;
   color: ${({ theme }) => theme.colors.fg};
   background-color: ${({ theme }) => theme.colors.bgContrast};

@@ -1,30 +1,24 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext } from 'react'
 import GlobalStyle from './globalStyle.js'
 import { ThemeProvider } from 'styled-components'
 import returnTheme from './Theme'
-import { getItem, setItem } from './utils/localStorage'
+
 import Routes from './components/Routes.jsx'
+import { GlobalContext } from './Context/index.js'
 
 export default function App() {
-  const [theme, setTheme] = useState(
-    getItem('theme') || {
-      darkMode: false,
-      color: 'green'
+  const { updateTransactions, theme } = useContext(GlobalContext)
+
+  navigator.serviceWorker.onmessage = ({ data }) => {
+    const { type, body } = JSON.parse(data)
+    if (type === 'Update Transactions') {
+      updateTransactions(body)
     }
-  )
-
-  useEffect(() => {
-    const storedTheme = getItem('theme')
-
-    if (!storedTheme || storedTheme !== theme) {
-      setItem('theme', theme)
-    }
-  }, [theme])
-
+  }
   return (
     <ThemeProvider theme={returnTheme(theme.darkMode, theme.color)}>
       <GlobalStyle />
-      <Routes theme={theme} setTheme={setTheme} />
+      <Routes />
     </ThemeProvider>
   )
 }

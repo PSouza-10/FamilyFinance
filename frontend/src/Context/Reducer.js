@@ -1,5 +1,5 @@
-import { GET, POST, DELETE, ERR, PUT, UPDATE } from './types'
-
+import { GET, POST, DELETE, ERR, PUT, UPDATE, SET_THEME } from './types'
+import { getItem } from '../utils/localStorage'
 export const initialState = {
   members: [
     'Paulo Henrique de Souza',
@@ -7,11 +7,20 @@ export const initialState = {
     'Paulo Rogério de Souza'
   ],
   transactions: [],
-  err: ''
+  err: '',
+  theme: getItem('theme') || {
+    darkMode: false,
+    color: 'green'
+  }
 }
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
+    case SET_THEME:
+      return {
+        ...state,
+        theme: payload
+      }
     case GET:
     case UPDATE:
       return {

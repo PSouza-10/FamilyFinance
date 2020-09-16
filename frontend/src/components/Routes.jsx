@@ -5,17 +5,13 @@ import AddTransactionPage from '../Pages/AddTransactionPage'
 import EditTransactionPage from '../Pages/EditTransactionPage'
 import Index from '../Pages/Index'
 
-export default function Routes({ theme, setTheme }) {
+export default function Routes() {
   return (
     <Router>
       <Route exact path='/transaction/:_id' component={TransactionInfo} />
       <Route exact path='/edit/:_id' component={EditTransactionPage} />
       <Route exact path='/add' component={AddTransactionPage} />
-      <Route
-        exact
-        path='/'
-        render={() => <Index theme={theme} setTheme={setTheme} />}
-      />
+      <Route exact path='/' render={() => <Index />} />
     </Router>
   )
 }
