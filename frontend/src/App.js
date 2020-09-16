@@ -11,6 +11,7 @@ export default function App() {
 
   navigator.serviceWorker.onmessage = ({ data }) => {
     const { type, body } = JSON.parse(data)
+
     if (type === 'Update Transactions') {
       updateTransactions(body)
     }

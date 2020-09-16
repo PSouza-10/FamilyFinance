@@ -31,15 +31,6 @@ class App {
 
   routes() {
     this.express.use('/api', routes)
-    if (process.env.NODE_ENV === 'production') {
-      this.express.use(express.static('frontend/build'))
-
-      this.express.get('*', (req, res) => {
-        return res.sendFile(
-          path.resolve(__dirname, 'frontend', 'build', 'index.html')
-        )
-      })
-    }
   }
 }
 

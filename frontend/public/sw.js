@@ -47,11 +47,20 @@ const refresh = async response => {
   return data
 }
 self.addEventListener('fetch', async e => {
-  e.respondWith(
-    caches.match(e.request).then(response => {
-      return response || fetch(e.request)
-    })
-  )
+  if (e.request.method === 'GET' && e.request.url.includes('/api')) {
+    e.respondWith(
+      caches.match(e.request).then(stored => {
+        return stored || fetch(e.request)
+      })
+    )
+    e.waitUntil(update(e.request).then(refresh))
+  } else {
+    e.respondWith(
+      caches.match(e.request).then(response => {
+        return response || fetch(e.request)
+      })
+    )
+  }
 })
 
 self.addEventListener('activate', e => {
