@@ -41,9 +41,7 @@ export const GlobalProvider = ({ children }) => {
         payload: 'Carregando...'
       })
       try {
-        const { data } = await axios.get(
-          'http://localhost:5000/api/transactions'
-        )
+        const { data } = await axios.get('/api/transactions')
         clearErrors()
         dispatch({
           type: GET,
