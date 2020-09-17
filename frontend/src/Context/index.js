@@ -9,31 +9,8 @@ export const GlobalContext = createContext(initialState)
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(Reducer, initialState)
-
-  useEffect(() => {
-    actions.getTransactions() // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
   const [spent, setSpent] = useState(0)
-  useEffect(() => {
-    let newSpent = 0
 
-    state.transactions.map(({ value }) => (newSpent += value))
-
-    setSpent(newSpent)
-  }, [state.transactions])
-
-  function returnTransaction(requested_id) {
-    const returnValue =
-      state.transactions.find(({ _id }) => _id === requested_id) || {}
-
-    return returnValue
-  }
-  function clearErrors() {
-    dispatch({
-      type: ERR,
-      payload: ''
-    })
-  }
   const actions = {
     async getTransactions() {
       dispatch({
@@ -156,6 +133,31 @@ export const GlobalProvider = ({ children }) => {
       setItem('theme', newTheme)
     }
   }
+
+  useEffect(() => {
+    actions.getTransactions() // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  useEffect(() => {
+    let newSpent = 0
+
+    state.transactions.map(({ value }) => (newSpent += value))
+
+    setSpent(newSpent)
+  }, [state.transactions])
+
+  function returnTransaction(requested_id) {
+    const returnValue =
+      state.transactions.find(({ _id }) => _id === requested_id) || {}
+
+    return returnValue
+  }
+  function clearErrors() {
+    dispatch({
+      type: ERR,
+      payload: ''
+    })
+  }
+
   return (
     <GlobalContext.Provider
       value={{

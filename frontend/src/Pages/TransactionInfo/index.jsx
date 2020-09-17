@@ -23,7 +23,7 @@ export default function TransactionInfo({ match }) {
     _id,
     value,
     member,
-    date,
+    display_date,
     type,
     description,
     imageSrc
@@ -54,7 +54,7 @@ export default function TransactionInfo({ match }) {
         </Alert>
         <Title>
           <span>{member}</span>
-          <span>{date}</span>
+          <span>{display_date}</span>
         </Title>
         <TransactionImage src={imageSrc} alt={type} />
         <Value>R${value}</Value>

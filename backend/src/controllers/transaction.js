@@ -1,6 +1,6 @@
 const Transaction = require('../models/Transaction')
 const { uploadImage, deleteImage } = require('../utils/image')
-const { returnReadableDate } = require('../utils/date')
+const { returnDate } = require('../utils/date')
 
 module.exports = {
   async index(req, res) {
@@ -20,7 +20,7 @@ module.exports = {
         .status(400)
         .send('Erro de Validação: Preencha os campos necessários')
     } else {
-      const dateString = await returnReadableDate(date)
+      const dateString = await returnDate(date)
 
       let imageData = {}
       if (image) {
@@ -33,19 +33,20 @@ module.exports = {
         member,
         value,
         description,
-        date: dateString
+        date: date,
+        display_date: dateString
       })
 
       return res.send(response)
     }
   },
   async edit(req, res) {
-    let { imageSrc, date, public_id, newImage } = req.body
+    let { imageSrc, date, public_id, newImage, display_date } = req.body
 
     const old = await Transaction.findById(req.params._id)
 
     if (old.date !== date) {
-      date = await returnReadableDate(date)
+      display_date = await returnDate(date)
     }
 
     let imageData = {
@@ -63,7 +64,8 @@ module.exports = {
       {
         ...req.body,
         ...imageData,
-        date
+        date,
+        display_date
       },
       { new: true }
     )

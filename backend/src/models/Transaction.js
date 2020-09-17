@@ -12,6 +12,10 @@ const TransactionSchema = new Schema(
       type: String,
       required: true
     },
+    display_date: {
+      type: String,
+      required: true
+    },
     member: {
       type: String,
       required: true

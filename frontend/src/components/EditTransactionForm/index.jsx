@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { formatDate } from '../../utils/date'
+
 import Input from '../UX/Input'
 import Alert from '../UX/Alert'
 import FormButton from '../UX/FormButton'
@@ -10,8 +10,7 @@ import UploadPhoto from '../UX/UploadImage'
 export default function EditTransactionForm({ history, transaction }) {
   const { members, editTransaction, err } = useContext(GlobalContext)
   const [transactionInfo, setTransactionInfo] = useState({
-    ...transaction,
-    date: formatDate(transaction.date)
+    ...transaction
   })
 
   const [file, setFile] = useState(transaction.imageSrc)
