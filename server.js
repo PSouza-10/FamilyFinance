@@ -13,15 +13,18 @@ cloudinary.config({
   api_secret: API_SECRET
 })
 
-const sslKey = fs.readFileSync('frontend/key.pem')
-const sslCert = fs.readFileSync('frontend/cert.pem')
+if (process.env.NODE_ENV === 'production') {
+  app.listen(PORT)
+} else {
+  const sslKey = fs.readFileSync('frontend/key.pem')
+  const sslCert = fs.readFileSync('frontend/cert.pem')
 
-
-const credentials ={
-  key : sslKey,
-  cert: sslCert
+  const credentials = {
+    key: sslKey,
+    cert: sslCert
+  }
+  const server = https.createServer(credentials, app)
+  server.listen(PORT, () =>
+    console.log(`Servidor HTTPS inicializado na Porta ${PORT}`)
+  )
 }
-
-const server = https.createServer(credentials,app)
-
-server.listen(PORT, () => console.log(`Servidor HTTPS inicializado na Porta ${PORT}`))
