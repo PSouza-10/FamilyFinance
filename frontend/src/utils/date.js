@@ -1,4 +1,5 @@
 export const formatDate = unformatted => {
+  console.log(unformatted)
   const date = unformatted.substring(0, 10).split('/').reverse().join('-')
   const time = unformatted.substring(11, 16)
 

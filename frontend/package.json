@@ -12,11 +12,12 @@
     "react-icons": "^3.11.0",
     "react-scripts": "3.4.3",
     "redux-devtools-extension": "^2.13.8",
+    "react-router-dom": "^5.2.0",
     "styled-components": "^5.1.1"
   },
-  "proxy": "https://family-finance.herokuapp.com",
   "scripts": {
-    "start": " react-scripts start",
+    "start-safe": "set HTTPS=true&&set SSL_KEY_FILE=key.pem&&set SSL_CRT_FILE=cert.pem&&set HOST=192.168.15.39&&set PORT=3000&&react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

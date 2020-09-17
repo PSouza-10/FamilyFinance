@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 
 import EditTransactionForm from '../../components/EditTransactionForm'
-import { Container, Header, ReturnIcon } from './styles'
-import { Link } from 'react-router-dom'
+import { Container, Header } from './styles'
+import ReturnButton from '../../components/UX/ReturnIcon'
 import { GlobalContext } from '../../Context'
 
 export default function EditTransactionPage({ match, history }) {
@@ -11,9 +11,7 @@ export default function EditTransactionPage({ match, history }) {
   return (
     <>
       <Header>
-        <Link to={`/transaction/${match.params._id}`}>
-          <ReturnIcon />
-        </Link>
+        <ReturnButton to={`/transaction/${match.params._id}`} />
         <p> Editar Transação </p>
       </Header>
       <Container>

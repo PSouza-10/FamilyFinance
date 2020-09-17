@@ -2,11 +2,14 @@ const cloudinary = require('cloudinary').v2
 
 const uploadImage = async base64Img => {
   try {
-    const { public_id, url } = await cloudinary.uploader.upload(base64Img, {})
+    const { public_id, secure_url } = await cloudinary.uploader.upload(
+      base64Img,
+      {}
+    )
 
     return {
       public_id,
-      imageSrc: url
+      imageSrc: secure_url
     }
   } catch (error) {
     console.error('Error on cloudinary upload')
