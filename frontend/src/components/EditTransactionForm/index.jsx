@@ -22,9 +22,10 @@ export default function EditTransactionForm({ history, transaction }) {
   const handleSubmit = async e => {
     e.preventDefault()
 
+    const newImage = file !== transaction.imageSrc ? file : null
     const response = await editTransaction({
       ...transactionInfo,
-      newImage: file
+      newImage
     })
 
     if (response !== 'ERROR') {

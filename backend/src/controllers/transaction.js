@@ -5,7 +5,7 @@ const { returnDate } = require('../utils/date')
 module.exports = {
   async index(req, res) {
     const transactions = await Transaction.find()
-    console.log('GET route')
+
     if (transactions === []) {
       return res.status(404).send('Nenhuma transação encontrada')
     }
